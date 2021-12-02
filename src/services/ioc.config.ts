@@ -1,11 +1,11 @@
 import {ContainerConfiguration, Scope} from 'typescript-ioc';
-import {HelloWorldApi} from './hello-world.api';
-import {HelloWorldService} from './hello-world.service';
+import {CalculatorAddApi} from './calculator-add.api';
+import {CalculatorAddService} from './calculator-add.service';
 
 const config: ContainerConfiguration[] = [
   {
-    bind: HelloWorldApi,
-    to: HelloWorldService,
+    bind: CalculatorAddApi,
+    to: CalculatorAddService,
     scope: Scope.Singleton
   }
 ];
