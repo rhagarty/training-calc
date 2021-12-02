@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv';
 
 export * from './calculator-add.api';
 export * from './calculator-add.service';
+export * from './calculator-sub.api';
+export * from './calculator-sub.service';
 
 import config from './ioc.config';
 

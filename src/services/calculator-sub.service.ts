@@ -1,24 +1,24 @@
-import {CalculatorAddApi} from './calculator-add.api';
+import {CalculatorSubApi} from './calculator-sub.api';
 import {Errors} from 'typescript-rest';
 import {Inject} from 'typescript-ioc';
 import {LoggerApi} from '../logger';
 import {CalculatorResult, convertToNumber, convertToRoman, isValid} from '../util/calc-utils';
 
-export class CalculatorAddService implements CalculatorAddApi {
+export class CalculatorSubService implements CalculatorSubApi {
   logger: LoggerApi;
 
   constructor(
     @Inject
     logger: LoggerApi,
   ) {
-    this.logger = logger.child('CalculatorAddService');
+    this.logger = logger.child('CalculatorSubService');
   }
 
   /**
-   * Add Roman numerals
+   * Subtract Roman numerals
    * @param params 
    */
-  async add(params: string = null): Promise<CalculatorResult> {
+  async subtract(params: string = null): Promise<CalculatorResult> {
     this.logger.info(`Adding roman numerals: ${params}`);
 
     // pull out each roman numeral from string
@@ -44,7 +44,13 @@ export class CalculatorAddService implements CalculatorAddApi {
       try {
         // wait for call to complete
         let num = await convertToNumber(operand) as number;
-        total = total + num;
+        if (idx == 0) {
+          // we add the first operand
+          total = total + num;
+        } else {
+          // then subtract all others
+          total = total - num;
+        }
       }
       catch (error) {
         console.log(error);
