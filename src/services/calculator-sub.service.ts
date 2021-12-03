@@ -19,7 +19,7 @@ export class CalculatorSubService implements CalculatorSubApi {
    * @param params 
    */
   async subtract(params: string = null): Promise<CalculatorResult> {
-    this.logger.info(`Adding roman numerals: ${params}`);
+    this.logger.info(`Subtracting roman numerals: ${params}`);
 
     // pull out each roman numeral from string
     let operands = params.split(',');
@@ -45,8 +45,8 @@ export class CalculatorSubService implements CalculatorSubApi {
         // wait for call to complete
         let num = await convertToNumber(operand) as number;
         if (idx == 0) {
-          // we add the first operand
-          total = total + num;
+          // we use the first operand as our base
+          total = num;
         } else {
           // then subtract all others
           total = total - num;

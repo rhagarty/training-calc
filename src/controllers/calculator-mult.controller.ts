@@ -17,7 +17,7 @@ export class CalculatorMultController {
 
   @GET
   async multiplyRomanNumerals(@QueryParam('operands') operands: string): Promise<string> {
-    this.logger.info(`Trying to add: ${operands}`);
+    this.logger.info(`Trying to multiply: ${operands}`);
 
     // return value is CalculatorResult
     let ret = this.service.multiply(operands);

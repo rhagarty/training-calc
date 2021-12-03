@@ -1,26 +1,26 @@
 import {GET, Path, QueryParam, Errors} from 'typescript-rest';
 import {Inject} from 'typescript-ioc';
-import {CalculatorSubApi} from '../services';
+import {CalculatorDivApi} from '../services';
 import {LoggerApi} from '../logger';
 
-@Path('/sub')
-export class CalculatorSubController {
+@Path('/div')
+export class CalculatorDivController {
 
   @Inject
-  service: CalculatorSubApi;
+  service: CalculatorDivApi;
   @Inject
   _baseLogger: LoggerApi;
 
   get logger() {
-    return this._baseLogger.child('CalculatorSubController');
+    return this._baseLogger.child('CalculatorDivController');
   }
 
   @GET
-  async subtractRomanNumerals(@QueryParam('operands') operands: string): Promise<string> {
-    this.logger.info(`Trying to subtract: ${operands}`);
+  async divideRomanNumerals(@QueryParam('operands') operands: string): Promise<string> {
+    this.logger.info(`Trying to divide: ${operands}`);
 
     // return value is CalculatorResult
-    let ret = this.service.subtract(operands);
+    let ret = this.service.divide(operands);
     if ((await ret).isValid) {
       return (await ret).result;
     } else {

@@ -1,25 +1,25 @@
-import {CalculatorMultApi} from './calculator-mult.api';
+import {CalculatorDivApi} from './calculator-div.api';
 import {Errors} from 'typescript-rest';
 import {Inject} from 'typescript-ioc';
 import {LoggerApi} from '../logger';
 import {CalculatorResult, convertToNumber, convertToRoman, isValid} from '../util/calc-utils';
 
-export class CalculatorMultService implements CalculatorMultApi {
+export class CalculatorDivService implements CalculatorDivApi {
   logger: LoggerApi;
 
   constructor(
     @Inject
     logger: LoggerApi,
   ) {
-    this.logger = logger.child('CalculatorMultService');
+    this.logger = logger.child('CalculatorDivService');
   }
 
   /**
-   * Multiply Roman numerals
+   * Divide Roman numerals
    * @param params 
    */
-  async multiply(params: string = null): Promise<CalculatorResult> {
-    this.logger.info(`Adding roman numerals: ${params}`);
+  async divide(params: string = null): Promise<CalculatorResult> {
+    this.logger.info(`Dividing roman numerals: ${params}`);
 
     // pull out each roman numeral from string
     let operands = params.split(',');
@@ -37,20 +37,21 @@ export class CalculatorMultService implements CalculatorMultApi {
         let result = new CalculatorResult(false);
         result.errorString = validCheckResult.errorString;
         result.errorType = validCheckResult.errorType;
-        // console.log('Error found: ' + JSON.stringify(result, null, 2));
+        this.logger.info('Error found: ' + JSON.stringify(result, null, 2));
         return result;
       }
 
       try {
         // wait for call to complete
         let num = await convertToNumber(operand) as number;
-
         if (idx == 0) {
           // we use the first operand as our base
           total = num;
         } else {
-          // then multiply all others
-          total = total * num;
+          // then divide all others
+          this.logger.info('Dividing ' + total + ' by ' + num);
+          total = total / num;
+          this.logger.info('      Result ' + total);
         }
       }
       catch (error) {
@@ -58,15 +59,17 @@ export class CalculatorMultService implements CalculatorMultApi {
       }
       idx++;
     };
-
-    // console.log('total = ' + total);
+    
+    let round = total.toFixed(0);
+    total = parseInt(round);
+    this.logger.info('total = ' + total);
 
     // we can't handle numbers < 0 or > 3999
     if (total < 0 || total > 3999) {
       let result = new CalculatorResult(false);
       result.errorString = 'ERROR - out of range (negative or > 3999)';
       result.errorType = Errors.NotImplementedError;
-      // console.log('Error found: ' + JSON.stringify(result, null, 2));
+      this.logger.info('Error found: ' + JSON.stringify(result, null, 2));
       return result;
     }
 
@@ -81,7 +84,7 @@ export class CalculatorMultService implements CalculatorMultApi {
 
     let result = new CalculatorResult(true);
     result.result = roman;
-    // console.log('Good result: ' + JSON.stringify(result, null, 2));
+    this.logger.info('Good result: ' + JSON.stringify(result, null, 2));
     return result;
   }
 }
