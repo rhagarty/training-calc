@@ -82,7 +82,7 @@ describe('Calculator Add service', () =>{
           {"errorString": 'ERROR - out of range (negative or > 3999)', 
            "errorType": Errors.NotImplementedError, 
            "isValid": false, 
-           "result": undefined});
+           "result": ''});
       });
     });
 

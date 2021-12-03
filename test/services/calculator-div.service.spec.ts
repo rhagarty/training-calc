@@ -104,7 +104,7 @@ describe('Calculator Divide service', () =>{
           {"errorString": 'ERROR - invalid roman numeral', 
            "errorType": Errors.BadRequestError, 
            "isValid": false, 
-           "result": undefined});
+           "result": ''});
       });
     });
   });
