@@ -4,16 +4,21 @@ import {Errors} from 'typescript-rest';
 import {CalculatorAddService} from '../../src/services';
 import {ApiServer} from '../../src/server';
 import {buildApiServer} from '../helper';
+import {server} from '../mocks/testServer';
 
 describe('Calculator Add service', () =>{
 
   let app: ApiServer;
   let service: CalculatorAddService;
+
   beforeAll(() => {
     app = buildApiServer();
-
     service = Container.get(CalculatorAddService);
+    server.listen();
   });
+
+  afterAll(() => { server.close() });
+  afterEach(() => { server.resetHandlers() });
 
   test('canary test verifies test infrastructure', () => {
     expect(service).not.toBeUndefined();
@@ -64,7 +69,7 @@ describe('Calculator Add service', () =>{
       });
     });
 
-    context('when "X,X,X,X,X" provided', () => {
+    context('when "X,XV,XI,X,X" provided', () => {
       const value = 'X,XV,XI,X,X';
       test('then return "LVI"', async () => {
         expect(await service.add(value)).toEqual(

@@ -1,4 +1,5 @@
 module.exports = {
+  verbose: true,
   preset: 'ts-jest',
   testEnvironment: 'node',
   coveragePathIgnorePatterns: [
@@ -20,5 +21,8 @@ module.exports = {
   testMatch: ["<rootDir>/test/**/*.spec.ts"],
   setupFiles: [
     "jest-plugin-context/setup"
+  ],
+  setupFilesAfterEnv: [
+    "<rootDir>/test/mocks/testServer.ts"
   ],
 };

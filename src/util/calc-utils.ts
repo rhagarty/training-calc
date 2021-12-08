@@ -27,15 +27,15 @@ export const OperationTypeSubtract = 'SUB';
  * Function to convert a Roman numeral to a number
  * @param value 
  */
-export function convertToNumber(value: string) {
+export async function convertToNumber(value: string): Promise<string> {
   return new Promise(function(resolve) {
 
+    // console.log('Attempt to convert roman numeral: ' + value);
     // get url from environment file
-    let url = process.env.NUMBER_ROMAN_URL + value;
-
+    let url = process.env.ROMAN_TO_NUMBER_URL + value;
     axios.get(url)
       .then(({ data }) => {
-        // console.log('convert ' + value + ' to number: ' + data);
+        console.log('converted ' + value + ' to number: ' + JSON.stringify(data, null, 2));
         resolve(data);
       })
       .catch(error => {
@@ -49,15 +49,15 @@ export function convertToNumber(value: string) {
  * Function to convert a number to a Roman numeral
  * @param value 
  */
-export function convertToRoman(value: number) {
+export async function convertToRoman(value: string): Promise<string> {
   return new Promise(function(resolve) {
 
+    // console.log('Attempt to convert number: ' + value);
     // get url from environment file
-    let url = process.env.ROMAN_TO_NUMBER_URL + value;
-
+    let url = process.env.NUMBER_TO_ROMAN_URL + value;
     axios.get(url)
       .then(({ data }) => {
-        // console.log('convert ' + value + ' to Roman: ' + data);
+        console.log('converted ' + value + ' to Roman: ' + JSON.stringify(data, null, 2));
         resolve(data);
       })
       .catch(error => {
@@ -95,6 +95,9 @@ export function isValidRoman(value:string) {
 }
 
 export async function processOperands(operands: string, logger: LoggerApi, operator: string): Promise<CalculatorResult> {
+  let result = new CalculatorResult(true, '', );
+  console.log('processOperands: ' + operator + ' ' + operands);
+
   // pull out each roman numeral from string
   let ops = operands.split(',');
 
@@ -114,29 +117,30 @@ export async function processOperands(operands: string, logger: LoggerApi, opera
 
     try {
       // wait for call to complete
-      let num = await convertToNumber(operand) as number;
+      let num = await convertToNumber(operand);
       if (idx == 0) {
         // we use the first operand as our base
-        total = num;
+        total = parseInt(num);
       } else {
         // perform operation
         switch(operator) {
           case OperationTypeAdd:
-            total = total + num;
+            total = total + parseInt(num);
             break;
           case OperationTypeSubtract:
-            total = total - num;
+            total = total - parseInt(num);
             break;
           case OperationTypeMultiply:
-            total = total * num;
+            total = total * parseInt(num);
             break;
           case OperationTypeDivide:
             logger.info('Dividing ' + total + ' by ' + num);
-            total = total / num;
+            total = total / parseInt(num);
             logger.info('      Result ' + total);  
             break;
         }
       }
+      console.log('running total: ' + total);
     }
     catch (error) {
       console.log(error);
@@ -153,7 +157,7 @@ export async function processOperands(operands: string, logger: LoggerApi, opera
 
   // we can't handle numbers < 0 or > 3999
   if (total < 0 || total > 3999) {
-    let result = new CalculatorResult(false, '', 
+    result = new CalculatorResult(false, '', 
       'ERROR - out of range (negative or > 3999)', 
       Errors.NotImplementedError);
     logger.info('Error found: ' + JSON.stringify(result, null, 2));
@@ -162,14 +166,15 @@ export async function processOperands(operands: string, logger: LoggerApi, opera
 
   // convert number back to roman numeral
   let roman: string;
+  let totalStr = total.toString();
   try {
-    roman = await convertToRoman(total) as string;
+    roman = await convertToRoman(totalStr);
   }
   catch (error) {
     console.log(error);
   }
 
-  let result = new CalculatorResult(true, roman);
+  result = new CalculatorResult(true, roman);
   logger.info('Good result: ' + JSON.stringify(result, null, 2));
   return result;
 }

@@ -4,6 +4,7 @@ import {Errors} from 'typescript-rest';
 import {CalculatorSubService} from '../../src/services';
 import {ApiServer} from '../../src/server';
 import {buildApiServer} from '../helper';
+import {server} from '../mocks/testServer';
 
 describe('Calculator Subtract service', () =>{
 
@@ -11,9 +12,12 @@ describe('Calculator Subtract service', () =>{
   let service: CalculatorSubService;
   beforeAll(() => {
     app = buildApiServer();
-
     service = Container.get(CalculatorSubService);
+    server.listen();
   });
+
+  afterAll(() => { server.close() });
+  afterEach(() => { server.resetHandlers() });
 
   test('canary test verifies test infrastructure', () => {
     expect(service).not.toBeUndefined();
