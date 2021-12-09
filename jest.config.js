@@ -19,9 +19,6 @@ module.exports = {
   ],
   testResultsProcessor: "jest-sonar-reporter",
   testMatch: ["<rootDir>/test/**/*.spec.ts"],
-  setupFiles: [
-    "jest-plugin-context/setup",
-    // "<rootDir>/test/mocks/testServer.ts"
-  ],
-  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
+  setupFiles: ["jest-plugin-context/setup"],
+  setupFilesAfterEnv: ["./jest.setup.js"],
 };

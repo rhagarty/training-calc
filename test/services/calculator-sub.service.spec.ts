@@ -16,8 +16,8 @@ describe('Calculator Subtract service', () =>{
     server.listen();
   });
 
-  // afterAll(() => { server.close() });
-  // afterEach(() => { server.resetHandlers() });
+  afterAll(() => { server.close() });
+  afterEach(() => { server.resetHandlers() });
 
   test('canary test verifies test infrastructure', () => {
     expect(service).not.toBeUndefined();
