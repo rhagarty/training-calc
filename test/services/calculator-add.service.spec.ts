@@ -4,7 +4,7 @@ import {Errors} from 'typescript-rest';
 import {CalculatorAddService} from '../../src/services';
 import {ApiServer} from '../../src/server';
 import {buildApiServer} from '../helper';
-import {server} from '../mocks/testServer';
+import {server} from '../../src/mocks/testServer';
 
 describe('Calculator Add service', () =>{
 
@@ -69,17 +69,6 @@ describe('Calculator Add service', () =>{
       });
     });
 
-    context('when "X,XV,XI,X,X" provided', () => {
-      const value = 'X,XV,XI,X,X';
-      test('then return "LVI"', async () => {
-        expect(await service.add(value)).toEqual(
-          {"errorString": undefined, 
-           "errorType": undefined, 
-           "isValid": true, 
-           "result": "LVI"});
-      });
-    });
-
     context('when "M,M,M,ML" provided', () => {
       const value = 'M,M,M,ML';
       test('then return "ERROR - out of range (negative or > 3999)"', async () => {
@@ -88,6 +77,17 @@ describe('Calculator Add service', () =>{
            "errorType": Errors.NotImplementedError, 
            "isValid": false, 
            "result": ''});
+      });
+    });
+
+    context('when "X,XV,XI,X,X" provided', () => {
+      const value = 'X,XV,XI,X,X';
+      test('then return "LVI"', async () => {
+        expect(await service.add(value)).toEqual(
+          {"errorString": undefined, 
+           "errorType": undefined, 
+           "isValid": true, 
+           "result": "LVI"});
       });
     });
 

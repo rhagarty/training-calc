@@ -4,7 +4,7 @@ import {Errors} from 'typescript-rest';
 import {CalculatorDivService} from '../../src/services';
 import {ApiServer} from '../../src/server';
 import {buildApiServer} from '../helper';
-import {server} from '../mocks/testServer';
+import {server} from '../../src/mocks/testServer';
 
 describe('Calculator Divide service', () =>{
 
@@ -90,6 +90,17 @@ describe('Calculator Divide service', () =>{
       });
     });
 
+    context('when "MMMM,XX,I" provided', () => {
+      const value = 'MMMM,XX,I';
+      test('then return "ERROR - invalid roman numeral"', async () => {
+        expect(await service.divide(value)).toEqual(
+          {"errorString": 'ERROR - invalid roman numeral', 
+           "errorType": Errors.BadRequestError, 
+           "isValid": false, 
+           "result": ''});
+      });
+    });
+
     context('when "V,XX,I" provided', () => {
       const value = 'V,XX,I';
       test('then return "nulla"', async () => {
@@ -101,15 +112,5 @@ describe('Calculator Divide service', () =>{
       });
     });
 
-    context('when "MMMM,XX,I" provided', () => {
-      const value = 'MMMM,XX,I';
-      test('then return "ERROR - invalid roman numeral"', async () => {
-        expect(await service.divide(value)).toEqual(
-          {"errorString": 'ERROR - invalid roman numeral', 
-           "errorType": Errors.BadRequestError, 
-           "isValid": false, 
-           "result": ''});
-      });
-    });
   });
 });

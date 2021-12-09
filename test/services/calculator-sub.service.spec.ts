@@ -4,7 +4,7 @@ import {Errors} from 'typescript-rest';
 import {CalculatorSubService} from '../../src/services';
 import {ApiServer} from '../../src/server';
 import {buildApiServer} from '../helper';
-import {server} from '../mocks/testServer';
+import {server} from '../../src/mocks/testServer';
 
 describe('Calculator Subtract service', () =>{
 
@@ -16,8 +16,8 @@ describe('Calculator Subtract service', () =>{
     server.listen();
   });
 
-  afterAll(() => { server.close() });
-  afterEach(() => { server.resetHandlers() });
+  // afterAll(() => { server.close() });
+  // afterEach(() => { server.resetHandlers() });
 
   test('canary test verifies test infrastructure', () => {
     expect(service).not.toBeUndefined();
@@ -68,17 +68,6 @@ describe('Calculator Subtract service', () =>{
       });
     });
 
-    context('when "M,X,X,X,X" provided', () => {
-      const value = 'M,X,X,X,X';
-      test('then return "CMLXI"', async () => {
-        expect(await service.subtract(value)).toEqual(
-          {"errorString": undefined, 
-           "errorType": undefined, 
-           "isValid": true, 
-           "result": "CMLX"});
-      });
-    });
-
     context('when "V,X,I" provided', () => {
       const value = 'V,X,I';
       test('then return "ERROR - out of range (negative or > 3999)"', async () => {
@@ -87,6 +76,17 @@ describe('Calculator Subtract service', () =>{
            "errorType": Errors.NotImplementedError, 
            "isValid": false, 
            "result": ''});
+      });
+    });
+
+    context('when "M,X,X,X,X" provided', () => {
+      const value = 'M,X,X,X,X';
+      test('then return "CMLXI"', async () => {
+        expect(await service.subtract(value)).toEqual(
+          {"errorString": undefined, 
+           "errorType": undefined, 
+           "isValid": true, 
+           "result": "CMLX"});
       });
     });
 

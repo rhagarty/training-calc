@@ -1,7 +1,7 @@
+// src/mocks/handlers.js
 import { rest } from 'msw';
-import { setupServer } from 'msw/node';
 
-const server = setupServer(
+export const handlers = [
   rest.get("*/to-roman", (req, resp, ctx) => {
     const value = req.url.searchParams.get('value');
     console.log('[MOCK] to-roman - value: ' + value);
@@ -29,6 +29,7 @@ const server = setupServer(
       ctx.body(retValue)
     )
   }),
+
   rest.get("*/to-number", (req, resp, ctx) => {
     const value = req.url.searchParams.get('value');
     console.log('[MOCK] to-number - value: ' + value);
@@ -55,6 +56,4 @@ const server = setupServer(
       ctx.body(retValue)
     )
   }),
-);
-
-export { server, rest };
+];

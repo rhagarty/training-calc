@@ -4,7 +4,7 @@ import {Errors} from 'typescript-rest';
 import {CalculatorMultService} from '../../src/services';
 import {ApiServer} from '../../src/server';
 import {buildApiServer} from '../helper';
-import {server} from '../mocks/testServer';
+import {server} from '../../src/mocks/testServer';
 
 describe('Calculator Multiply service', () =>{
 
@@ -68,17 +68,6 @@ describe('Calculator Multiply service', () =>{
       });
     });
 
-    context('when "I,II,III,V,X" provided', () => {
-      const value = 'I,II,III,V,X';
-      test('then return "CCC"', async () => {
-        expect(await service.multiply(value)).toEqual(
-          {"errorString": undefined, 
-           "errorType": undefined, 
-           "isValid": true, 
-           "result": "CCC"});
-      });
-    });
-
     context('when "M,X,I" provided', () => {
       const value = 'M,X,I';
       test('then return "ERROR - out of range (negative or > 3999)"', async () => {
@@ -87,6 +76,17 @@ describe('Calculator Multiply service', () =>{
            "errorType": Errors.NotImplementedError, 
            "isValid": false, 
            "result": ''});
+      });
+    });
+
+    context('when "I,II,III,V,X" provided', () => {
+      const value = 'I,II,III,V,X';
+      test('then return "CCC"', async () => {
+        expect(await service.multiply(value)).toEqual(
+          {"errorString": undefined, 
+           "errorType": undefined, 
+           "isValid": true, 
+           "result": "CCC"});
       });
     });
 
