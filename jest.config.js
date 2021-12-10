@@ -20,5 +20,9 @@ module.exports = {
   testResultsProcessor: "jest-sonar-reporter",
   testMatch: ["<rootDir>/test/**/*.spec.ts"],
   setupFiles: ["jest-plugin-context/setup"],
-  setupFilesAfterEnv: ["./jest.setup.js"],
 };
+
+process.env = Object.assign(process.env, {
+  NUMBER_TO_ROMAN_URL: 'https://localhost/to-roman?value=',
+  ROMAN_TO_NUMBER_URL: 'https://localhost/to-number?value='
+});
