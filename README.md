@@ -1,76 +1,70 @@
-<p align="center">
-    <a href="http://kitura.io/">
-        <img src="https://landscape.cncf.io/logos/ibm-member.svg" height="100" alt="IBM Cloud">
-    </a>
-</p>
-
-<p align="center">
-    <a href="https://cloud.ibm.com">
-    <img src="https://img.shields.io/badge/IBM%20Cloud-powered-blue.svg" alt="IBM Cloud">
-    </a>
-    <img src="https://img.shields.io/badge/platform-node-lightgrey.svg?style=flat" alt="platform">
-    <img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2">
-</p>
-
 # TypeScript Microservice or Backend for Frontend with Node.js
 
-This Starter Kit Template can be the foundation of a TypeScript Node.js Microservice or Backend for Frontend.
+Built using Cloud Native Starter Kit Template - specifically the template for TypeScript node.js services.
 
+## Service API
 
-## Features
+`https://localhost/<operation>?operands=<parameters>`
 
-The starter kit provides the following features:
+For example: `https://localhost/add?operands=X,V,I`
 
-- Built with [TypeScript](https://www.typescriptlang.org/)
-- REST services using `typescript-rest` decorators
-- Swagger documentation using `typescript-rest-swagger`
-- Dependency injection using `typescript-ioc` decorators
-- Logging using `bunyan`
-- TDD environment with [Jest](https://jestjs.io/)
-- Pact testing [Pact](https://docs.pact.io/)
-- Jenkins DevOps pipeline that support OpenShift or IKS deployment
+## Key files:
 
-#### Native Application Development
+I divided my service into 4 classes:
 
-Install the latest [Node.js](https://nodejs.org/en/download/) 6+ LTS version.
+* `CalculatorAdd<type>`
+* `CalculatorDiv<type>`
+* `CalculatorMult<type>`
+* `CalculatorSub<type>`
 
-After you have created a new git repo from this git template, remember to rename the project.
-Edit `package.json` and change the default name to the name you used to create the template.
+Which are represented in the following files:
 
-Once the Node toolchain has been installed, you can download the project dependencies with:
+`/src/controllers`
 
-```bash
-npm install
-npm run build
-npm run start
+* `calculator-add-controller.ts`
+* `calculator-div-controller.ts`
+* `calculator-mult-controller.ts`
+* `calculator-sub-controller.ts`
+
+`/src/services`
+
+* `calculator-add-service.ts`
+* `calculator-div-service.ts`
+* `calculator-mult-service.ts`
+* `calculator-sub-service.ts`
+
+The main function that does all of the conversion and math:
+
+* `/src/util/calc-utils.ts`
+* Uses `Axios` for `GET` calls to the conversion service
+
+## Jest Mocks
+
+Tests are all located in:
+
+* `/test/controllers`
+* `/test/services`
+
+Mock files are located in:
+`/src/mocks`
+
+I am using the Mock Service Worker ([mws](https://mswjs.io)) framework. With it I can contain all of my mock responses in one file (`/src/mocks/handlers.ts`).
+
+**NOTE**: I am using ENV vars to set my conversion service URLS. In order for the mocks to work without these variables, I added dummy values in `/jest.config.js`:
+
+```javascript
+process.env = Object.assign(process.env, {
+  NUMBER_TO_ROMAN_URL: 'https://localhost/to-roman?value=',
+  ROMAN_TO_NUMBER_URL: 'https://localhost/to-number?value='
+});
 ```
 
-### Deploying 
+## GitHub repos and OpenShift projects
 
-Make sure you are logged into the IBM Cloud using the IBM Cloud CLI and have access 
-to your development cluster.
-
-```$bash
-npm i -g @ibmgaragecloud/cloud-native-toolkit-cli
-ibmcloud login -a cloud.ibm.com -r <region> -g <resource group>
-ibmcloud ks cluster-config --cluster <cluster-name>
-kubectl get pods
-
-```
-
-Use the IBM Garage for Cloud CLI to register the GIT Repo with Jenkins environment 
-```$bash
-oc sync <project> --dev
-oc pipeline 
-```
-
-## More Details
-
-For more details on how to use this Starter Kit Template please review the [IBM Garage for Cloud Developer Tools Developer Guide](https://cloudnativetoolkit.dev/)
-
-## Next Steps
-
-* Learn more about augmenting your Node.js applications on IBM Cloud with the [Node Programming Guide](https://cloud.ibm.com/docs/node?topic=nodejs-getting-started).
+* Conversion service - https://github.com/rhagarty/training-conv
+* Conversion service project - `training-rhagarty-conv`
+* Calculator service - https://github.com/rhagarty/training-calc
+* Calculator service project - `training-rhagarty-calc`
 
 ## License
 
