@@ -4,7 +4,6 @@ import { rest } from 'msw';
 export const handlers = [
   rest.get("*/to-roman", (req, resp, ctx) => {
     const value = req.url.searchParams.get('value');
-    console.log('[MOCK] to-roman - value: ' + value);
     let retValue: string;
 
     // do the num to roman conversion for numbers required by our tests
@@ -24,6 +23,7 @@ export const handlers = [
     else if (value === '960') retValue = 'CMLX';
     else if (value === '3300') retValue = 'MMMCCC';
     
+    console.log('[MOCK to-roman]: ' + value + ' = ' + retValue);
     return resp(
       ctx.status(200),
       ctx.body(retValue)
@@ -32,7 +32,6 @@ export const handlers = [
 
   rest.get("*/to-number", (req, resp, ctx) => {
     const value = req.url.searchParams.get('value');
-    console.log('[MOCK] to-number - value: ' + value);
     let retValue: string;
 
     // do the roman to num conversion for numbers required by our tests
@@ -51,9 +50,19 @@ export const handlers = [
     else if (value === 'M') retValue = '1000';
     else if (value === 'ML') retValue = '1050';
     
+    console.log('[MOCK to-number]: ' + value + ' = ' + retValue);
     return resp(
       ctx.status(200),
       ctx.body(retValue)
     )
   }),
+
+  rest.get("*", (req, resp, ctx) => {
+    console.error(`Add request handler for ${req.url.toString()}`);
+    return resp(
+      ctx.status(500),
+      ctx.json({ error: 'Add request handler'})
+    )
+  }),
+
 ];

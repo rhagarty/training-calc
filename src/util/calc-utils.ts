@@ -35,7 +35,7 @@ export async function convertToNumber(value: string): Promise<string> {
     let url = process.env.ROMAN_TO_NUMBER_URL + value;
     axios.get(url)
       .then(({ data }) => {
-        console.log('converted ' + value + ' to number: ' + JSON.stringify(data, null, 2));
+        // console.log('converted ' + value + ' to number: ' + JSON.stringify(data, null, 2));
         resolve(data);
       })
       .catch(error => {
@@ -57,7 +57,7 @@ export async function convertToRoman(value: string): Promise<string> {
     let url = process.env.NUMBER_TO_ROMAN_URL + value;
     axios.get(url)
       .then(({ data }) => {
-        console.log('converted ' + value + ' to Roman: ' + JSON.stringify(data, null, 2));
+        // console.log('converted ' + value + ' to Roman: ' + JSON.stringify(data, null, 2));
         resolve(data);
       })
       .catch(error => {
@@ -96,7 +96,7 @@ export function isValidRoman(value:string) {
 
 export async function processOperands(operands: string, logger: LoggerApi, operator: string): Promise<CalculatorResult> {
   let result = new CalculatorResult(true, '', );
-  console.log('processOperands: ' + operator + ' ' + operands);
+  // console.log('processOperands: ' + operator + ' ' + operands);
 
   // pull out each roman numeral from string
   let ops = operands.split(',');
@@ -111,7 +111,7 @@ export async function processOperands(operands: string, logger: LoggerApi, opera
     // first check if we have a valid roman numeral
     let validCheckResult = isValidRoman(operand);
     if (!validCheckResult.isValid) {
-      logger.info('Error found: ' + JSON.stringify(validCheckResult, null, 2));
+      // console.log('Error found: ' + JSON.stringify(validCheckResult, null, 2));
       return validCheckResult;
     }
 
@@ -134,13 +134,13 @@ export async function processOperands(operands: string, logger: LoggerApi, opera
             total = total * parseInt(num);
             break;
           case OperationTypeDivide:
-            logger.info('Dividing ' + total + ' by ' + num);
+            // console.log('Dividing ' + total + ' by ' + num);
             total = total / parseInt(num);
-            logger.info('      Result ' + total);  
+            // console.log('      Result ' + total);  
             break;
         }
       }
-      console.log('running total: ' + total);
+      // console.log('running total: ' + total);
     }
     catch (error) {
       console.log(error);
@@ -153,14 +153,14 @@ export async function processOperands(operands: string, logger: LoggerApi, opera
     total = parseInt(round);
   }
 
-  logger.info('total = ' + total);  
+  // console.log('total = ' + total);  
 
   // we can't handle numbers < 0 or > 3999
   if (total < 0 || total > 3999) {
     result = new CalculatorResult(false, '', 
       'ERROR - out of range (negative or > 3999)', 
       Errors.NotImplementedError);
-    logger.info('Error found: ' + JSON.stringify(result, null, 2));
+      // console.log('Error found: ' + JSON.stringify(result, null, 2));
     return result;
   }
 
@@ -175,6 +175,6 @@ export async function processOperands(operands: string, logger: LoggerApi, opera
   }
 
   result = new CalculatorResult(true, roman);
-  logger.info('Good result: ' + JSON.stringify(result, null, 2));
+  // console.log('Good result: ' + JSON.stringify(result, null, 2));
   return result;
 }
